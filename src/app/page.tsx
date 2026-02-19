@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { supabase } from "../lib/supabaseClient"
 
 export default function Home() {
-  const [email, setEmail] = useState("")
+  
   const [user, setUser] = useState<any>(null)
 
   const [title, setTitle] = useState("")
@@ -49,27 +49,31 @@ export default function Home() {
 }, [user])
 
 
-  const fetchBookmarks = async () => {
-    const { data } = await supabase
-      .from("bookmarks")
-      .select("*")
-      .order("created_at", { ascending: false })
+ const fetchBookmarks = async () => {
+  if (!user) return
 
-    setBookmarks(data || [])
+  const { data } = await supabase
+    .from("bookmarks")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false })
+
+  setBookmarks(data || [])
+}
+
+
+ const handleLogin = async () => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+  });
+
+  if (error) {
+    console.error("Google login error:", error.message);
   }
+};
 
-  const handleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-    })
 
-    if (error) {
-      alert("Error sending login link")
-    } else {
-      alert("Check your email for login link!")
-    }
-  }
-
+  
   const handleLogout = async () => {
     await supabase.auth.signOut()
     setUser(null)
@@ -176,23 +180,27 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-      <h1 className="text-2xl font-bold">Smart Bookmark App</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen gap-6 p-4">
+  <h1 className="text-3xl font-bold">Smart Bookmark App</h1>
 
-      <input
-        type="email"
-        placeholder="Enter your email"
-        className="border p-2 rounded"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+  {!user ? (
+    <button
+  onClick={handleLogin}
+  className="bg-black text-white px-6 py-2 rounded"
+>
+  Login with Google
+</button>
 
-      <button
-        onClick={handleLogin}
-        className="bg-black text-white px-4 py-2 rounded"
-      >
-        Login
-      </button>
-    </div>
+  ) : (
+    <>
+      <h2 className="text-lg">
+        Welcome {user.email}
+      </h2>
+
+      {/* Bookmark form + list here */}
+    </>
+  )}
+</div>
   )
 }
+
