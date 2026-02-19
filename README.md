@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart Bookmark App
 
-## Getting Started
+A private bookmark manager built using Next.js and Supabase.
 
-First, run the development server:
+##  Live Demo
+(Will update after Vercel deployment)
 
-```bash
+##  Tech Stack
+
+- Next.js 14
+- React 18
+- Supabase (Auth + Postgres + Realtime)
+- Tailwind CSS
+- Vercel (Deployment)
+
+##  Features
+
+- Email OTP authentication
+- Secure per-user data isolation using Row Level Security (RLS)
+- Add bookmarks (title + URL)
+- Delete bookmarks
+- Realtime updates across multiple tabs
+- Search functionality
+- Responsive UI
+
+##  Security
+
+User data isolation is enforced at the database level using Supabase Row Level Security policies:
+- Users can only read, insert, and delete their own bookmarks.
+- Prevents cross-user data access.
+
+##  Realtime Implementation
+
+Used Supabase Postgres change subscriptions to listen for changes in the bookmarks table.
+Filtered by user_id to ensure only relevant updates are received.
+
+##  Installation (Local Setup)
+
+1. Clone the repository:
+
+git clone https://github.com/Yaduvamsikrishna123/smart-bookmark-app.git
+
+
+2. Install dependencies:
+
+npm install
+
+
+3. Create `.env.local` file in root:
+
+NEXT_PUBLIC_SUPABASE_URL=your_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_publishable_key
+
+
+4. Start development server:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+App will run at:
+http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## Future Improvements
 
-To learn more about Next.js, take a look at the following resources:
+- Edit bookmark feature
+- Pagination
+- Folder/category grouping
+- Server-side search
+- Improved UI styling
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built as part of a screening task to demonstrate fullstack development skills using modern web technologies
