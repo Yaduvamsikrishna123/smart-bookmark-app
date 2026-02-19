@@ -1,74 +1,166 @@
 # Smart Bookmark App
 
 A private bookmark manager built using Next.js and Supabase.
+ Tech Stack
 
-##  Live Demo
-(Will update after Vercel deployment)
+Next.js 14 (App Router)
 
-##  Tech Stack
+React 18
 
-- Next.js 14
-- React 18
-- Supabase (Auth + Postgres + Realtime)
-- Tailwind CSS
-- Vercel (Deployment)
+Supabase
 
-##  Features
+Google OAuth Authentication
 
-- Email OTP authentication
-- Secure per-user data isolation using Row Level Security (RLS)
-- Add bookmarks (title + URL)
-- Delete bookmarks
-- Realtime updates across multiple tabs
-- Search functionality
-- Responsive UI
+Postgres Database
 
-##  Security
+Row Level Security (RLS)
 
-User data isolation is enforced at the database level using Supabase Row Level Security policies:
-- Users can only read, insert, and delete their own bookmarks.
-- Prevents cross-user data access.
+Realtime Subscriptions
 
-##  Realtime Implementation
+Tailwind CSS
 
-Used Supabase Postgres change subscriptions to listen for changes in the bookmarks table.
-Filtered by user_id to ensure only relevant updates are received.
+Vercel (Deployment)
 
-##  Installation (Local Setup)
+## Features
+ Google OAuth Authentication
 
-1. Clone the repository:
+Login using Google only (no email/password).
+
+Secure session handling via Supabase Auth.
+
+## Add Bookmarks
+
+Users can add bookmarks with:
+
+Title
+
+URL
+
+🗑 Delete Bookmarks
+
+Users can delete only their own bookmarks.
+
+## Private Per User (Database-Level Security)
+
+Implemented Row Level Security (RLS).
+
+Policy ensures:
+
+auth.uid() = user_id
+
+
+Prevents cross-user data access at the database level.
+
+ ## Real-Time Updates
+
+Implemented using Supabase Postgres change subscriptions.
+
+Updates sync instantly across multiple browser tabs.
+
+No manual refresh required.
+
+ Search Functionality
+
+Client-side filtering by bookmark title.
+
+ Security Implementation
+
+Security is enforced at the database level, not just in the frontend.
+
+Each bookmark row stores user_id.
+
+## RLS policies restrict:
+
+SELECT
+
+INSERT
+
+DELETE
+
+Users cannot access or modify other users' bookmarks.
+
+## Environment Variables
+
+The following environment variables are required:
+
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+## Local Setup Instructions
+
+## Clone the repository:
 
 git clone https://github.com/Yaduvamsikrishna123/smart-bookmark-app.git
 
 
-2. Install dependencies:
+Install dependencies:
 
 npm install
 
 
-3. Create `.env.local` file in root:
+Create .env.local file:
 
 NEXT_PUBLIC_SUPABASE_URL=your_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_publishable_key
 
 
-4. Start development server:
+Start development server:
 
 npm run dev
 
 
-App will run at:
+App runs at:
+
 http://localhost:3000
 
+## Deployment
+
+Deployed on Vercel
+
+Environment variables configured in Vercel dashboard
+
+Supabase Site URL and Redirect URLs configured for production domain
+
+## Challenges Faced & Solutions
+1. OAuth Redirect Issue
+
+Problem: After clicking Google login, redirect went to localhost instead of Vercel.
+Solution: Updated Supabase Authentication → URL Configuration with correct production domain.
+
+2. Realtime Sync Issue
+
+Problem: Deleted bookmarks required refresh in some cases.
+Solution: Added user-specific filtering in both realtime subscription and fetch query.
+
+3. Git Push Rejection
+
+Problem: Remote repository contained changes not available locally.
+Solution: Resolved using:
+
+git pull origin main --rebase
 
 ## Future Improvements
 
-- Edit bookmark feature
-- Pagination
-- Folder/category grouping
-- Server-side search
-- Improved UI styling
+Edit bookmark functionality
 
----
+Server-side search using .ilike
 
-Built as part of a screening task to demonstrate fullstack development skills using modern web technologies
+Bookmark categories/folders
+
+Pagination for large datasets
+
+UI enhancements
+
+## Final Notes
+
+This project demonstrates:
+
+Authentication flow implementation
+
+Secure multi-user data handling
+
+Real-time database updates
+
+Production deployment workflow
+
+Built with focus on clean architecture, security, and real-time user experience.
