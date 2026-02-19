@@ -65,6 +65,9 @@ export default function Home() {
  const handleLogin = async () => {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
+    options: {
+      redirectTo: window.location.origin,
+    },
   });
 
   if (error) {
@@ -78,22 +81,28 @@ export default function Home() {
     await supabase.auth.signOut()
     setUser(null)
   }
+const addBookmark = async () => {
+  if (!title || !url || !user) return
 
-  const addBookmark = async () => {
-    if (!title || !url) return
-
-    await supabase.from("bookmarks").insert([
+  const { data, error } = await supabase
+    .from("bookmarks")
+    .insert([
       {
         user_id: user.id,
         title,
         url,
       },
     ])
+    .select()
 
-    setTitle("")
-    setUrl("")
-    fetchBookmarks()
+  if (!error && data) {
+    setBookmarks((prev) => [data[0], ...prev])
   }
+
+  setTitle("")
+  setUrl("")
+}
+
 
   if (user) {
     return (
