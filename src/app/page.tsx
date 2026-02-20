@@ -66,7 +66,7 @@ export default function Home() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: window.location.origin,
+      redirectTo: "https://smart-bookmark-app-three-rho.vercel.app",
     },
   });
 
